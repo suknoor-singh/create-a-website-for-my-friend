@@ -3,7 +3,6 @@ const siteNav = document.querySelector(".site-nav");
 const navItemsWithChildren = document.querySelectorAll(".site-nav__item.has-children");
 const disclaimerModal = document.querySelector("[data-disclaimer-modal]");
 const acceptDisclaimerButton = document.querySelector("[data-accept-disclaimer]");
-const closeDisclaimerElements = document.querySelectorAll("[data-close-disclaimer]");
 const openDisclaimerElements = document.querySelectorAll("[data-open-disclaimer]");
 const disclaimerStorageKey = "ajmani_disclaimer_accepted";
 const whatsappWidget = document.querySelector("[data-whatsapp-widget]");
@@ -56,22 +55,10 @@ if (disclaimerModal && acceptDisclaimerButton) {
         closeDisclaimer(true);
     });
 
-    closeDisclaimerElements.forEach((element) => {
-        element.addEventListener("click", () => {
-            closeDisclaimer(false);
-        });
-    });
-
     openDisclaimerElements.forEach((element) => {
         element.addEventListener("click", () => {
             openDisclaimer();
         });
-    });
-
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !disclaimerModal.hidden) {
-            closeDisclaimer(false);
-        }
     });
 }
 
