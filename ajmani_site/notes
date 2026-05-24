@@ -1,11 +1,11 @@
- disclaimer must not allow to enter a website unless user click on I agree.
+disclaimer must not allow to enter a website unless user click on I agree.
 Multiple pages - not a single page site
 
 dbmasteruser
-Ff6TK*Q9uJ$:H>9G5jgS[cxA~iPpXV2(
-Endpoint
+Database password rotated on server
+Endpoint stored outside repo
+Port 5432
 
-ls-aff9afba971f4bcf89f8b5c701d134c113ef5b51.cr608i84q1xu.ap-south-1.rds.amazonaws.com
-Port
+Bucket access keys removed from repo
 
-5432
+App secret key stored outside repo
