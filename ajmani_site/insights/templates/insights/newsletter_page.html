@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-newsletter-page{% endblock %}
+
+{% block content %}
+<article class="article-shell">
+    <section class="page-hero section">
+        <div class="container page-hero__inner">
+            <p class="eyebrow">Newsletter</p>
+            <h1>{{ page.title }}</h1>
+            <div class="article-meta">
+                <span>{{ page.publication_date|date:"F j, Y" }}</span>
+                {% if page.issue_label %}
+                <span>{{ page.issue_label }}</span>
+                {% endif %}
+            </div>
+            {% if page.summary %}
+            <p class="lead">{{ page.summary }}</p>
+            {% endif %}
+            {% if page.pdf_document %}
+            <p>
+                <a class="button button--secondary" href="{{ page.pdf_document.url }}" target="_blank" rel="noreferrer">
+                    Open PDF version
+                </a>
+            </p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container page-body__inner richtext">
+            {{ page.body|richtext }}
+        </div>
+    </section>
+</article>
+{% endblock content %}

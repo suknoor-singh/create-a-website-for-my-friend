@@ -1,0 +1,4 @@
+Watching for file changes with StatReloader
+[12/May/2026 01:10:28] "GET / HTTP/1.1" 200 6312
+[12/May/2026 01:10:28,343] - Broken pipe from ('127.0.0.1', 60996)
+C:\Users\sobti_ewvfrji\Documents\Codex\2026-05-12\create-a-website-for-my-friend\ajmani_site\home\models.py changed, reloading.

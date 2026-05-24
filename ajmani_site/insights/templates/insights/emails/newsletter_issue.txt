@@ -1,0 +1,8 @@
+{{ issue.title }}
+
+{% if issue.summary %}{{ issue.summary }}{% endif %}
+
+Read the full issue:
+{{ issue_url }}
+
+{{ plain_summary|striptags|truncatechars:1200 }}

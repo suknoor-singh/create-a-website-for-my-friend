@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+ajmani_site/static/
+ajmani_site/media/
+ajmani_site/.pytest_cache/
+ajmani_site/.mypy_cache/

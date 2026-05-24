@@ -1,0 +1,198 @@
+{% load static wagtailcore_tags wagtailuserbar %}
+{% wagtail_site as current_site %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+            {% endblock %}
+            {% block title_suffix %}
+            {% wagtail_site as current_site %}
+            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+            {% endblock %}
+        </title>
+        {% if page.search_description %}
+        <meta name="description" content="{{ page.search_description }}" />
+        {% endif %}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#0e2a47" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+        {# Force all links in the live preview panel to be opened in a new tab #}
+        {% if request.in_preview_panel %}
+        <base target="_blank">
+        {% endif %}
+
+        {# Global stylesheets #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/ajmani_site.css' %}">
+
+        {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+        {% endblock %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+        {% wagtailuserbar %}
+
+        {% with root_page=current_site.root_page.specific %}
+        <div class="site-shell">
+            <header class="site-header">
+                <div class="container site-header__inner">
+                    <a class="brand" href="{% pageurl current_site.root_page %}">
+                        <span class="brand__name">Ajmani and Law Partners</span>
+                        <span class="brand__tag">Delhi litigation practice</span>
+                    </a>
+                    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+                        Menu
+                    </button>
+                    <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+                        <a class="site-nav__home" href="{% pageurl current_site.root_page %}">Home</a>
+                        {% for nav_item in current_site.root_page.get_children.live.in_menu.specific %}
+                            {% with nav_children=nav_item.get_children.live.in_menu.specific %}
+                                {% if nav_children %}
+                                <div class="site-nav__item has-children">
+                                    <a href="{% pageurl nav_item %}">{{ nav_item.title }}</a>
+                                    <button class="site-nav__toggle" type="button" aria-expanded="false" aria-label="Toggle {{ nav_item.title }} submenu">
+                                        <span></span>
+                                    </button>
+                                    <div class="site-nav__dropdown">
+                                        {% for nav_child in nav_children %}
+                                        <a href="{% pageurl nav_child %}">{{ nav_child.title }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% else %}
+                                <a href="{% pageurl nav_item %}">{{ nav_item.title }}</a>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </nav>
+                </div>
+            </header>
+
+            <main>
+                {% if messages %}
+                <div class="site-messages" aria-live="polite">
+                    <div class="container">
+                        {% for message in messages %}
+                        <div class="site-message site-message--{{ message.tags|default:'info' }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% block content %}{% endblock %}
+            </main>
+
+            <footer class="site-footer">
+                <div class="container site-footer__grid">
+                    <div>
+                        <p class="eyebrow eyebrow--footer">Ajmani and Law Partners</p>
+                        <p class="site-footer__copy">
+                            A professional website for a Delhi litigation practice with room to grow into newsletters,
+                            articles, and future enquiry workflows.
+                        </p>
+                        {% if root_page.compliance_note %}
+                        <button class="disclaimer-link" type="button" data-open-disclaimer>
+                            Read website disclaimer
+                        </button>
+                        {% endif %}
+                    </div>
+                    <div class="site-footer__meta">
+                        {% if root_page.contact_email %}
+                        <p><a href="mailto:{{ root_page.contact_email }}">{{ root_page.contact_email }}</a></p>
+                        {% endif %}
+                        {% if root_page.contact_phone %}
+                        <p><a href="tel:{{ root_page.contact_phone }}">{{ root_page.contact_phone }}</a></p>
+                        {% endif %}
+                        {% if root_page.compliance_note %}
+                        <p>{{ root_page.compliance_note }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </footer>
+
+            {% if root_page.compliance_note %}
+            <div
+                class="disclaimer-modal"
+                data-disclaimer-modal
+                hidden
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="disclaimer-title"
+            >
+                <div class="disclaimer-modal__backdrop" data-close-disclaimer></div>
+                <div class="disclaimer-modal__panel">
+                    <p class="eyebrow">Website disclaimer</p>
+                    <h2 id="disclaimer-title">By proceeding, you acknowledge the professional website notice.</h2>
+                    <div class="disclaimer-modal__copy">
+                        <p>
+                            The rules of the Bar Council of India restrict advocates from soliciting work or advertising.
+                            By accessing this website, you confirm that you are seeking information about Ajmani and Law
+                            Partners on your own request and that there has been no advertisement, solicitation, or
+                            inducement by the firm or its members.
+                        </p>
+                        <p>{{ root_page.compliance_note }}</p>
+                        <p>
+                            The material on this website is for general information only and may not reflect the most
+                            current legal developments. It should not be treated as legal advice for any specific matter.
+                        </p>
+                    </div>
+                    <div class="disclaimer-modal__actions">
+                        <button class="button button--primary" type="button" data-accept-disclaimer>
+                            I understand and wish to proceed
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if root_page.whatsapp_number %}
+            <div class="whatsapp-widget" data-whatsapp-widget>
+                <button class="whatsapp-widget__bubble" type="button" data-whatsapp-toggle aria-expanded="false">
+                    <span class="whatsapp-widget__icon">WhatsApp</span>
+                </button>
+                <div class="whatsapp-widget__panel" hidden>
+                    <div class="whatsapp-widget__header">
+                        <p>We are available on WhatsApp</p>
+                        <button type="button" data-whatsapp-close aria-label="Close WhatsApp widget">×</button>
+                    </div>
+                    <div class="whatsapp-widget__body">
+                        <div class="whatsapp-widget__message">
+                            Explain your case in brief. We will contact you on WhatsApp or phone.
+                        </div>
+                        <textarea
+                            data-whatsapp-input
+                            rows="3"
+                            placeholder="Type your message here"
+                        >{{ root_page.whatsapp_default_message }}</textarea>
+                        <a
+                            class="button button--primary whatsapp-widget__send"
+                            data-whatsapp-send
+                            href="https://wa.me/{{ root_page.whatsapp_number|cut:'+'|cut:' ' }}"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Start WhatsApp chat
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endwith %}
+
+        {# Global javascript #}
+        <script type="text/javascript" src="{% static 'js/ajmani_site.js' %}"></script>
+
+        {% block extra_js %}
+        {# Override this in templates to add extra javascript #}
+        {% endblock %}
+    </body>
+</html>

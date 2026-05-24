@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Django: runserver",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}\\ajmani_site\\manage.py",
+      "args": [
+        "runserver"
+      ],
+      "django": true,
+      "justMyCode": true,
+      "cwd": "${workspaceFolder}\\ajmani_site"
+    }
+  ]
+}

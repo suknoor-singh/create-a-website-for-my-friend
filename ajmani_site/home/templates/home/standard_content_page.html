@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-standard-content{% endblock %}
+
+{% block content %}
+<section class="page-hero section">
+    <div class="container page-hero__inner">
+        <p class="eyebrow">{{ page.get_parent.title }}</p>
+        <h1>{{ page.title }}</h1>
+        {% if page.intro %}
+        <p class="lead">{{ page.intro }}</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="container content-layout">
+        <article class="article-shell">
+            {% if page.featured_image %}
+                {% image page.featured_image width-1200 as featured %}
+                <div class="content-media">
+                    <img src="{{ featured.url }}" alt="{{ page.title }}">
+                </div>
+            {% endif %}
+            <div class="richtext">{{ page.body|richtext }}</div>
+        </article>
+        {% if page.highlights %}
+        <aside class="content-aside">
+            <p class="eyebrow">Key points</p>
+            <ul>
+                {% for item in page.highlights %}
+                <li>{{ item.value }}</li>
+                {% endfor %}
+            </ul>
+        </aside>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

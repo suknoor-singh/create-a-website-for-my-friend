@@ -1,0 +1,28 @@
+prompt 1 
+
+Create a website for my friend who is a lawyer in delhi.
+He has good google reviews, works in district, high and supreme courts in delhi.
+Has his own firm 'Ajmani and Law Partners' 
+Release monthly newsletters.
+
+
+Suggest me tech stack on top of which you should build this website. 
+Keep in mind 
+1. I have knowledge of python, aws, sqlite as of now.
+2,. Budget is tight, suggest tech with lowest cost.
+3. He has a domain name he purcahsed from godaddy.
+4. Once website is built, we will let him update his website as in when he requires. Note- he is not from technical background, on ther hand I am en engineer.
+5. Incase python, sqlite and aws are not standalone enough for a good looking modern webstie (Use your knowledge to search top websites of delhi lawyers) and we are forced to use frontend tech stack, then angular is something I will be comfortable with.
+
+Basis your suggestion, please guide me how to do installations and setup strcuture for you and then you build this website.
+
+
+promt 2
+
+1. Integrate google page https://share.google/uWgDGPjVvt7nrNqtQ in contact section so that Maps to office location are also available.
+2. In Reviews section, make it like a snapshot of actual google review itself, where xact name of reviewer also appears. But make sure it's dynamic so that tomorrow a new review comes then it comes here.
+3. https://www.instagram.com/p/DIyETm1SAi5/?igsh=MWs1dW5kYXZzNzJtcw==
+take Lalit's photo from here and remove unwanted background.
+4. Add 'type your email' to subscribe to newsletter section so that if Lalit upload a newsletter, it delivers to those who added their email.
+5. Add a widget at bottom with whatsapp icon which allows to drop a message in whatsapp chat diretly. 
+6. Teach me how can Lalit update this webstie and upload newsletters and recieve responses on his email (lalit@ajmaniandlawpartners.com)

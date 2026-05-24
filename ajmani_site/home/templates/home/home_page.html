@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+<section class="hero section">
+    <div class="container hero__grid">
+        <div class="hero__content">
+            <p class="eyebrow">{{ page.intro_kicker }}</p>
+            <h1>{{ page.hero_title }}</h1>
+            <p class="lead">{{ page.hero_subtitle }}</p>
+            <div class="hero__actions">
+                {% if page.primary_cta_label and page.primary_cta_link %}
+                <a class="button button--primary" href="{{ page.primary_cta_link }}">{{ page.primary_cta_label }}</a>
+                {% endif %}
+                {% if page.secondary_cta_label and page.secondary_cta_link %}
+                <a class="button button--secondary" href="{{ page.secondary_cta_link }}">{{ page.secondary_cta_label }}</a>
+                {% endif %}
+            </div>
+
+            {% if page.credibility_points %}
+            <ul class="pill-list" aria-label="Firm highlights">
+                {% for item in page.credibility_points %}
+                <li>{{ item.value }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <aside class="hero__panel">
+            <p class="hero__panel-label">Why clients choose the firm</p>
+            <ul class="feature-list">
+                <li>Strong presence in Delhi district courts</li>
+                <li>Regular matters before the Delhi High Court</li>
+                <li>Capability to brief and appear in Supreme Court matters</li>
+                <li>Credibility reinforced by positive Google reviews</li>
+            </ul>
+            <p class="microcopy">{{ page.compliance_note }}</p>
+        </aside>
+    </div>
+</section>
+
+<section id="firm" class="section">
+    <div class="container two-column">
+        <div>
+            <p class="eyebrow">About the firm</p>
+            <h2>{{ page.firm_overview_title }}</h2>
+            <div class="richtext">{{ page.firm_overview|richtext }}</div>
+        </div>
+        <div class="profile-card">
+            {% if page.founder_image %}
+            {% image page.founder_image fill-640x760 as founder_photo %}
+            <img class="profile-card__image" src="{{ founder_photo.url }}" alt="{{ page.founder_name }}">
+            {% elif page.founder_name == "Lalit Ajmani" %}
+            <img class="profile-card__image" src="{% static 'images/lalit-ajmani-cutout.png' %}" alt="{{ page.founder_name }}">
+            {% endif %}
+            <p class="profile-card__label">Founder profile</p>
+            <h3>{{ page.founder_name }}</h3>
+            <p class="profile-card__role">{{ page.founder_designation }}</p>
+            <div class="richtext">{{ page.founder_bio|richtext }}</div>
+            {% if page.founder_linkedin_url %}
+            <p class="profile-card__link">
+                <a class="button button--secondary" href="{{ page.founder_linkedin_url }}" target="_blank" rel="noreferrer">
+                    View LinkedIn profile
+                </a>
+            </p>
+            {% endif %}
+            {% if page.founder_highlights %}
+            <ul class="check-list">
+                {% for item in page.founder_highlights %}
+                <li>{{ item.value }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% if page.court_coverage %}
+<section id="courts" class="section section--muted">
+    <div class="container">
+        <p class="eyebrow">Court coverage</p>
+        <h2>Representation across the key courts that matter in Delhi.</h2>
+        <div class="card-grid card-grid--three">
+            {% for item in page.court_coverage %}
+            <article class="card">
+                <p class="card__kicker">Court</p>
+                <h3>{{ item.value.name }}</h3>
+                <p>{{ item.value.detail }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if page.practice_areas %}
+<section id="practice-areas" class="section">
+    <div class="container">
+        <p class="eyebrow">Practice areas</p>
+        <h2>Focused legal services, explained clearly.</h2>
+        <div class="card-grid card-grid--three">
+            {% for item in page.practice_areas %}
+            <article class="card">
+                <h3>{{ item.value.title }}</h3>
+                <p>{{ item.value.description }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if google_reviews or page.testimonials %}
+<section id="reviews" class="section section--accent">
+    <div class="container">
+        <p class="eyebrow">Client trust</p>
+        <h2>Positive feedback should feel credible, recognisable, and easy to verify.</h2>
+        <div class="reviews-layout">
+            <aside class="review-summary">
+                <p class="review-summary__label">Google rating</p>
+                {% if google_review_feed %}
+                <h3>{{ google_review_feed.average_rating|floatformat:1 }}/5</h3>
+                <p>Based on {{ google_review_feed.total_review_count }} reviews</p>
+                {% else %}
+                <h3>5.0/5</h3>
+                <p>Based on verified client feedback</p>
+                {% endif %}
+                {% if page.google_business_share_url %}
+                <a class="button button--secondary button--light" href="{{ page.google_business_share_url }}" target="_blank" rel="noreferrer">
+                    Open Google listing
+                </a>
+                {% endif %}
+            </aside>
+
+            <div class="review-cards">
+                {% if google_reviews %}
+                    {% for review in google_reviews %}
+                    <article class="review-card">
+                        <header class="review-card__header">
+                            <div class="review-card__identity">
+                                {% if review.author_photo_url %}
+                                <img class="review-card__avatar" src="{{ review.author_photo_url }}" alt="{{ review.author_name }}">
+                                {% else %}
+                                <div class="review-card__avatar review-card__avatar--fallback">{{ review.author_name|first }}</div>
+                                {% endif %}
+                                <div>
+                                    <h3>{{ review.author_name }}</h3>
+                                    {% if review.relative_publish_time_description %}
+                                    <p>{{ review.relative_publish_time_description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <span class="review-card__source">Google</span>
+                        </header>
+                        <p class="review-card__stars">{{ review.rating|floatformat:0 }}/5</p>
+                        <p class="review-card__quote">"{{ review.review_text|truncatechars:220 }}"</p>
+                        {% if review.review_url %}
+                        <a class="review-card__link" href="{{ review.review_url }}" target="_blank" rel="noreferrer">Read on Google</a>
+                        {% endif %}
+                    </article>
+                    {% endfor %}
+                {% else %}
+                    {% for item in page.testimonials %}
+                    <blockquote class="card testimonial">
+                        <p class="testimonial__rating">{{ item.value.rating }}/5 on {{ item.value.source }}</p>
+                        <p class="testimonial__quote">"{{ item.value.quote }}"</p>
+                        <footer>{{ item.value.author }}</footer>
+                    </blockquote>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section id="newsletters" class="section">
+    <div class="container newsletter-strip">
+        <div>
+            <p class="eyebrow">Insights</p>
+            <h2>{{ page.newsletter_title }}</h2>
+            <p class="lead lead--compact">{{ page.newsletter_intro }}</p>
+        </div>
+        {% if newsletter_index %}
+        <a class="button button--secondary" href="{% pageurl newsletter_index %}">Open newsletter archive</a>
+        {% endif %}
+    </div>
+
+    <div class="container newsletter-subscribe">
+        <div>
+            <p class="eyebrow">Subscribe</p>
+            <h3>Type your email to receive future newsletter issues.</h3>
+            <p class="lead lead--compact">Once email delivery is configured, new published issues can be sent automatically to everyone subscribed here.</p>
+        </div>
+        <form class="newsletter-form" action="{% url 'subscribe_newsletter' %}" method="post">
+            {% csrf_token %}
+            {{ newsletter_form.email }}
+            <button class="button button--primary" type="submit">Subscribe</button>
+        </form>
+    </div>
+
+    {% if latest_newsletters %}
+    <div class="container card-grid card-grid--three">
+        {% for newsletter in latest_newsletters %}
+        <article class="card article-card">
+            <p class="card__kicker">{{ newsletter.publication_date|date:"F Y" }}</p>
+            <h3><a href="{% pageurl newsletter %}">{{ newsletter.title }}</a></h3>
+            {% if newsletter.summary %}
+            <p>{{ newsletter.summary }}</p>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<section id="contact" class="section section--muted">
+    <div class="container contact-panel">
+        <div class="contact-map">
+            {% if page.google_maps_embed_query %}
+            <iframe
+                title="Ajmani and Law Partners office location"
+                src="https://www.google.com/maps?q={{ page.google_maps_embed_query|urlencode }}&z=15&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            {% endif %}
+            <div class="contact-map__actions">
+                {% if page.google_maps_url %}
+                <a class="button button--secondary" href="{{ page.google_maps_url }}" target="_blank" rel="noreferrer">Open in Google Maps</a>
+                {% endif %}
+                {% if page.google_business_share_url %}
+                <a class="button button--secondary" href="{{ page.google_business_share_url }}" target="_blank" rel="noreferrer">View Google listing</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="contact-form-shell">
+            <p class="eyebrow">Contact</p>
+            <h2>Make it easy for prospective clients to take the next step.</h2>
+            <p class="lead lead--compact">
+                Enquiries submitted here are saved in the website database and can also be emailed to {{ page.contact_email }} once SMTP or SES is configured.
+            </p>
+
+            <form class="contact-form" action="{% url 'submit_inquiry' %}" method="post">
+                {% csrf_token %}
+                {{ contact_form.name }}
+                {{ contact_form.email }}
+                {{ contact_form.phone }}
+                {{ contact_form.message }}
+                <button class="button button--primary" type="submit">Send enquiry</button>
+            </form>
+
+            <div class="contact-card">
+                {% if page.contact_phone %}
+                <p><span>Phone</span><a href="tel:{{ page.contact_phone }}">{{ page.contact_phone }}</a></p>
+                {% endif %}
+                {% if page.contact_email %}
+                <p><span>Email</span><a href="mailto:{{ page.contact_email }}">{{ page.contact_email }}</a></p>
+                {% endif %}
+                {% if page.office_address %}
+                <p><span>Office</span>{{ page.office_address|linebreaksbr }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

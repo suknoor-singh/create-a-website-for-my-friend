@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-newsletter-index{% endblock %}
+
+{% block content %}
+<section class="page-hero section">
+    <div class="container page-hero__inner">
+        <p class="eyebrow">Insights archive</p>
+        <h1>{{ page.title }}</h1>
+        {% if page.intro %}
+        <p class="lead">{{ page.intro }}</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="container card-grid">
+        {% for newsletter in newsletters %}
+        <article class="card article-card">
+            <p class="card__kicker">{{ newsletter.publication_date|date:"F j, Y" }}</p>
+            <h2><a href="{% pageurl newsletter %}">{{ newsletter.title }}</a></h2>
+            {% if newsletter.issue_label %}
+            <p><strong>{{ newsletter.issue_label }}</strong></p>
+            {% endif %}
+            {% if newsletter.summary %}
+            <p>{{ newsletter.summary }}</p>
+            {% endif %}
+            <div class="article-card__actions">
+                <a class="button button--secondary" href="{% pageurl newsletter %}">Read issue</a>
+                {% if newsletter.pdf_document %}
+                <a class="button button--secondary" href="{{ newsletter.pdf_document.url }}" target="_blank" rel="noreferrer">Open PDF</a>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <article class="card">
+            <h2>First newsletter coming soon</h2>
+            <p>Create the first monthly update from the Wagtail admin and it will automatically appear here.</p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock content %}
